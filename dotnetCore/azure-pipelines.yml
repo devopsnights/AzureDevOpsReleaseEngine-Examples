@@ -1,0 +1,71 @@
+resources:
+  repositories:
+  - repository: ReleaseEngine
+    type: github
+    endpoint: devopsnights
+    name: devopsnights/AzureDevOpsReleaseEngine
+    ref: refs/heads/feature/appService
+
+trigger:
+  branches:
+    include:
+    - main
+    - feature/*
+  paths:
+    include:
+      - src/development/dotnetCore/*
+      
+      
+pool:
+  # vmImage: 'windows-latest'
+  name: default
+
+extends: 
+  template: src/gitflow-main.yml@ReleaseEngine
+  parameters:
+    settings:
+      build:
+        enabled: true
+      deploy:
+        enabled: true
+        variablesDirectory: dotnetCore/variables
+        infrastructure:
+          enabled: true
+        application:
+          enabled: true
+      azure:
+        subscription:
+          serviceConnection: $(serviceConnection)
+          subscriptionId: $(subscriptionId)
+        resourceGroup:
+          name: $(resourceGroupName)
+          location: $(location)
+          new: true
+      environments:
+        - dev
+        # - uat
+        # - prd
+    resources:
+      - name: $(applicationName)
+        type: dotnetCore
+        alias: app-releaseengine
+        enabled: true
+        deploy:
+          type: azureWebApp
+          infrastructure:
+            enabled: true
+            servicePlanName: $(servicePlanName)
+          application:
+            enabled: true
+
+      - name: $(applicationName2)
+        type: dotnetCore
+        alias: app-releaseengine2
+        enabled: false
+        deploy:
+          type: azureWebApp
+          infrastructure:
+            enabled: true
+            servicePlanName: $(servicePlanName)
+          application:
+            enabled: true
