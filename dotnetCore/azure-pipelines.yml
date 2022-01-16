@@ -48,7 +48,7 @@ extends:
     resources:
       - name: $(applicationName)
         type: dotnetCore
-        alias: app-releaseengine
+        runName: app-releaseengine
         enabled: true
         deploy:
           type: azureWebApp
