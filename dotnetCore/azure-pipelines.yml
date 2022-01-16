@@ -21,7 +21,7 @@ pool:
   name: default
 
 extends: 
-  template: src/gitflow-main.yml@ReleaseEngine
+  template: src/main.yml@ReleaseEngine
   parameters:
     settings:
       build:
@@ -50,18 +50,6 @@ extends:
         type: dotnetCore
         alias: app-releaseengine
         enabled: true
-        deploy:
-          type: azureWebApp
-          infrastructure:
-            enabled: true
-            servicePlanName: $(servicePlanName)
-          application:
-            enabled: true
-
-      - name: $(applicationName2)
-        type: dotnetCore
-        alias: app-releaseengine2
-        enabled: false
         deploy:
           type: azureWebApp
           infrastructure:
